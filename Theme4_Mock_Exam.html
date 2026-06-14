@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theme 4 — Philosophy of Science · Mock Exam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f0e0c;
+    --bg-soft:#16140f;
+    --card:#1b1813;
+    --card-hover:#211d16;
+    --line:#2e2a20;
+    --gold:#c9a96e;
+    --gold-soft:#d9c195;
+    --gold-dim:#8c7a52;
+    --ink:#e9e2d3;
+    --ink-soft:#b6ac98;
+    --muted:#7d745f;
+    --correct:#6f8f5e;
+    --correct-bg:rgba(111,143,94,.14);
+    --wrong:#b25b50;
+    --wrong-bg:rgba(178,91,80,.14);
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'DM Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #1a1711 0%, transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-weight:300;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:120px;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    max-width:860px;margin:0 auto;
+    padding:64px 28px 28px;
+    text-align:center;
+  }
+  .eyebrow{
+    font-family:var(--sans);
+    letter-spacing:.42em;
+    text-transform:uppercase;
+    font-size:.66rem;
+    color:var(--gold-dim);
+    font-weight:500;
+    margin-bottom:22px;
+  }
+  header h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(2.4rem,6vw,3.6rem);
+    line-height:1.04;
+    color:var(--ink);
+    letter-spacing:.01em;
+  }
+  header h1 em{color:var(--gold);font-style:italic}
+  .rule{
+    width:54px;height:1px;background:var(--gold-dim);
+    margin:26px auto 22px;opacity:.7;
+  }
+  header p.lede{
+    font-family:var(--serif);
+    font-size:1.25rem;
+    font-style:italic;
+    color:var(--ink-soft);
+    max-width:540px;margin:0 auto;
+  }
+  .meta{
+    margin-top:22px;font-size:.78rem;color:var(--muted);
+    letter-spacing:.04em;
+  }
+
+  /* ---------- STICKY STATUS BAR ---------- */
+  .status{
+    position:sticky;top:0;z-index:50;
+    background:linear-gradient(var(--bg) 70%, rgba(15,14,12,.0));
+    backdrop-filter:blur(6px);
+    padding:14px 0 16px;
+    border-bottom:1px solid var(--line);
+  }
+  .status-inner{
+    max-width:860px;margin:0 auto;padding:0 28px;
+    display:flex;align-items:center;gap:18px;
+    flex-wrap:wrap;justify-content:space-between;
+  }
+  .progress-track{
+    flex:1;min-width:180px;height:5px;border-radius:6px;
+    background:var(--line);overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;width:0%;border-radius:6px;
+    background:linear-gradient(90deg,var(--gold-dim),var(--gold));
+    transition:width .35s ease;
+  }
+  .status-stats{
+    display:flex;gap:22px;font-size:.78rem;letter-spacing:.05em;
+    color:var(--ink-soft);white-space:nowrap;
+  }
+  .status-stats b{color:var(--gold);font-weight:600}
+
+  /* ---------- QUESTIONS ---------- */
+  main{max-width:860px;margin:0 auto;padding:40px 28px 0}
+
+  .section-head{
+    margin:46px 0 18px;
+  }
+  .section-head:first-child{margin-top:8px}
+  .section-head .s-num{
+    font-family:var(--serif);font-style:italic;
+    color:var(--gold-dim);font-size:1.1rem;
+  }
+  .section-head h2{
+    font-family:var(--serif);font-weight:600;
+    font-size:1.7rem;color:var(--gold-soft);
+    letter-spacing:.01em;line-height:1.1;margin-top:2px;
+  }
+  .section-head .s-line{
+    height:1px;background:var(--line);margin-top:14px;
+  }
+
+  .q-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:24px 24px 22px;
+    margin-bottom:18px;
+    transition:border-color .25s ease;
+  }
+  .q-card.answered{border-color:#34301f}
+  .q-top{
+    display:flex;gap:14px;align-items:baseline;margin-bottom:16px;
+  }
+  .q-index{
+    font-family:var(--serif);font-style:italic;font-size:1.35rem;
+    color:var(--gold);line-height:1;flex-shrink:0;min-width:34px;
+  }
+  .q-text{
+    font-size:1.06rem;color:var(--ink);font-weight:400;line-height:1.5;
+  }
+
+  .options{display:flex;flex-direction:column;gap:9px}
+  .option{
+    display:flex;align-items:flex-start;gap:13px;
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:13px 15px;
+    cursor:pointer;
+    transition:background .18s ease,border-color .18s ease,transform .08s ease;
+    font-size:.95rem;color:var(--ink-soft);
+  }
+  .option:hover:not(.locked){background:var(--card-hover);border-color:var(--gold-dim)}
+  .option:active:not(.locked){transform:scale(.995)}
+  .option .letter{
+    font-family:var(--serif);font-style:italic;font-size:1.05rem;
+    color:var(--gold-dim);flex-shrink:0;width:18px;text-align:center;line-height:1.45;
+  }
+  .option .otext{flex:1;line-height:1.45}
+  .option .mark{
+    flex-shrink:0;width:20px;text-align:center;font-size:1rem;
+    opacity:0;transition:opacity .2s ease;
+  }
+
+  .options.locked .option{cursor:default}
+  .option.correct{
+    background:var(--correct-bg);border-color:var(--correct);color:var(--ink);
+  }
+  .option.correct .letter{color:var(--correct)}
+  .option.correct .mark{opacity:1;color:var(--correct)}
+  .option.incorrect{
+    background:var(--wrong-bg);border-color:var(--wrong);color:var(--ink);
+  }
+  .option.incorrect .letter{color:var(--wrong)}
+  .option.incorrect .mark{opacity:1;color:var(--wrong)}
+
+  .explain{
+    max-height:0;overflow:hidden;
+    transition:max-height .4s ease,margin .4s ease,padding .4s ease;
+    margin-top:0;
+  }
+  .explain.show{
+    max-height:260px;margin-top:15px;
+  }
+  .explain-inner{
+    border-left:2px solid var(--gold-dim);
+    padding:2px 0 2px 16px;
+    font-family:var(--serif);font-style:italic;
+    font-size:1.05rem;color:var(--ink-soft);line-height:1.45;
+  }
+  .explain-inner b{color:var(--gold-soft);font-style:normal;font-weight:600;font-family:var(--sans);font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:4px;}
+
+  /* ---------- RESULTS ---------- */
+  .results-anchor{height:1px}
+  #results{
+    max-width:860px;margin:60px auto 0;padding:0 28px;
+    display:none;
+  }
+  #results.show{display:block;animation:rise .5s ease}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .result-card{
+    background:linear-gradient(180deg,#1d1a13,#161310);
+    border:1px solid var(--gold-dim);
+    border-radius:18px;
+    padding:42px 32px 36px;
+    text-align:center;
+  }
+  .result-card .eyebrow{margin-bottom:16px}
+  .score-num{
+    font-family:var(--serif);font-weight:700;
+    font-size:clamp(3.4rem,12vw,5.4rem);line-height:1;
+    color:var(--gold);
+  }
+  .score-num span{font-size:.42em;color:var(--ink-soft);font-weight:500}
+  .score-frac{
+    font-size:.9rem;color:var(--muted);letter-spacing:.08em;margin-top:10px;
+  }
+  .verdict{
+    font-family:var(--serif);font-style:italic;font-size:1.5rem;
+    color:var(--ink);margin-top:22px;
+  }
+  .breakdown{
+    margin-top:30px;text-align:left;
+    display:grid;grid-template-columns:1fr;gap:10px;
+  }
+  .bd-row{
+    display:flex;align-items:center;gap:14px;
+    font-size:.88rem;color:var(--ink-soft);
+  }
+  .bd-label{flex:1}
+  .bd-bar{
+    width:120px;height:6px;border-radius:6px;background:var(--line);overflow:hidden;flex-shrink:0;
+  }
+  .bd-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold))}
+  .bd-score{width:48px;text-align:right;color:var(--gold-soft);font-variant-numeric:tabular-nums}
+
+  .btn-row{display:flex;gap:14px;justify-content:center;margin-top:34px;flex-wrap:wrap}
+  .btn{
+    font-family:var(--sans);font-size:.82rem;letter-spacing:.12em;
+    text-transform:uppercase;font-weight:500;
+    padding:13px 26px;border-radius:30px;cursor:pointer;
+    border:1px solid var(--gold-dim);background:transparent;color:var(--gold);
+    transition:background .2s ease,color .2s ease;
+  }
+  .btn:hover{background:var(--gold);color:#14110b}
+  .btn.ghost{border-color:var(--line);color:var(--ink-soft)}
+  .btn.ghost:hover{background:var(--card-hover);color:var(--ink)}
+
+  /* floating reveal button */
+  #revealBtn{
+    position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+    z-index:60;opacity:0;pointer-events:none;transition:opacity .3s ease;
+    background:var(--gold);color:#14110b;border:none;
+    box-shadow:0 10px 30px rgba(0,0,0,.5);
+  }
+  #revealBtn.show{opacity:1;pointer-events:auto}
+  #revealBtn:hover{background:var(--gold-soft)}
+
+  footer{
+    max-width:860px;margin:50px auto 0;padding:30px 28px 0;
+    border-top:1px solid var(--line);
+    text-align:center;font-size:.74rem;color:var(--muted);letter-spacing:.04em;
+  }
+  @media(max-width:560px){
+    .q-card{padding:20px 16px}
+    .status-stats{gap:14px;font-size:.72rem}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">History &amp; Methods of Psychology · Theme 4</div>
+  <h1>Philosophy of <em>Science</em></h1>
+  <div class="rule"></div>
+  <p class="lede">A fifty-question examination on scientific knowledge, epistemology, causality, the empirical cycle and the norms of science.</p>
+  <div class="meta">Tap an answer to lock it in · the correct option and a note are revealed instantly</div>
+</header>
+
+<div class="status">
+  <div class="status-inner">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="status-stats">
+      <span>Answered <b id="answeredCount">0</b>/50</span>
+      <span>Correct <b id="correctCount">0</b></span>
+    </div>
+  </div>
+</div>
+
+<main id="quiz"></main>
+
+<div class="results-anchor" id="resultsAnchor"></div>
+<section id="results">
+  <div class="result-card">
+    <div class="eyebrow">Examination Complete</div>
+    <div class="score-num" id="scorePct">0<span>%</span></div>
+    <div class="score-frac" id="scoreFrac">0 / 50 correct</div>
+    <div class="verdict" id="verdict"></div>
+    <div class="breakdown" id="breakdown"></div>
+    <div class="btn-row">
+      <button class="btn" onclick="resetQuiz()">Retake the exam</button>
+      <button class="btn ghost" onclick="scrollToFirstWrong()">Review my mistakes</button>
+    </div>
+  </div>
+</section>
+
+<button id="revealBtn" class="btn" onclick="showResults()">See my results &#8595;</button>
+
+<footer>
+  Built from Bem &amp; Looren de Jong (2013), Ch.&nbsp;1 &amp; Logical Positivism · Turner &amp; McCreery (2015), Scientific Norms — for personal study use.
+</footer>
+
+<script>
+const QUESTIONS = [
+ {sec:"Definition of Scientific Knowledge", q:"An impressive feature of science is that it can explain disconnected phenomena as the effects of what?",
+  o:["Underlying causal structures","Random correlations between events","Divine or supernatural intervention","The shared intuitions of experts"],a:0,
+  e:"Science unifies and systematises: it reduces a bewildering variety of phenomena to underlying causal structures (e.g. chemistry to the table of elements)."},
+ {sec:"Definition of Scientific Knowledge", q:"The somewhat \u201cdisturbing\u201d consequence of reduction is that everyday phenomena turn out to be \u201creally\u201d\u2026",
+  o:["Nothing but atoms and molecules","Illusions created by language","Beyond all scientific explanation","Products of individual free will"],a:0,
+  e:"Reduction implies thoughts are \u201cnothing but\u201d physiological mechanisms \u2014 reducing rich mental life to drab machinery."},
+ {sec:"Definition of Scientific Knowledge", q:"Reduction operates at two levels: ignoring accidental aspects at the descriptive level, and at the explanatory level\u2026",
+  o:["Reducing phenomena to underlying principles","Eliminating every unobservable entity","Removing mathematics from theory","Rejecting common sense entirely"],a:0,
+  e:"E.g. water, steam and ice are explained as the same chemical substance under different conditions."},
+ {sec:"Definition of Scientific Knowledge", q:"Which is named as \u201cthe most distinguishing feature of science\u201d relative to common sense?",
+  o:["Reduction \u2014 finding the hidden springs behind phenomena","Clarity of language","Revisability of claims","Intersubjective objectivity"],a:0,
+  e:"More than common sense, science aims to find the hidden springs behind the phenomena."},
+
+ {sec:"Everyday vs Scientific Knowledge", q:"Sellars\u2019s distinction between the \u201cmanifest image\u201d and the \u201cscientific image\u201d concerns\u2026",
+  o:["Two frameworks for the concept of man-in-the-world","Two stages of cognitive development","Two rival empirical theories","The difference between art and science"],a:0,
+  e:"\u201cImage\u201d means the framework in terms of which man views himself \u2014 manifest (common sense) vs scientific (particles and forces)."},
+ {sec:"Everyday vs Scientific Knowledge", q:"The \u201cmanifest image\u201d is best described as\u2026",
+  o:["The world of objects and persons of common sense","The world of particles and forces of advanced science","A purely religious worldview","The contents of the unconscious"],a:0,
+  e:"The manifest image is common sense \u2014 from naive acceptance to sophisticated reflection in literature and philosophy."},
+ {sec:"Everyday vs Scientific Knowledge", q:"Sellars\u2019s own preferred way of relating the two images is\u2026",
+  o:["That both are real, united in a \u201cstereoscopic\u201d vision","That only the scientific image is real","That only the manifest image is real","That the two are strictly identical"],a:0,
+  e:"Sellars takes a fourth option: unite both in stereoscopic vision, with science recreating the manifest image in its own terms."},
+
+ {sec:"Realism, Idealism & Pragmatism", q:"In realism, the common view of truth is\u2026",
+  o:["Correspondence \u2014 theories are true if they match reality","Coherence with the rest of knowledge","Practical success","Social consensus"],a:0,
+  e:"Realism: knowledge pictures the objective world; truth is correspondence between knowledge and the world."},
+ {sec:"Realism, Idealism & Pragmatism", q:"In idealism, the common view of truth is\u2026",
+  o:["Coherence with the rest of our knowledge","Correspondence with nature","Falsification","Verification"],a:0,
+  e:"Idealism: knowledge is a subjective (or social) construction; truth is coherence \u2014 plausible for e.g. mathematics."},
+ {sec:"Realism, Idealism & Pragmatism", q:"For pragmatism \u2014 the authors\u2019 own intermediate position \u2014 truth is\u2026",
+  o:["Success","Correspondence with nature","Pure coherence","Divine revelation"],a:0,
+  e:"Pragmatism: knowledge is functional and interactive, \u201ccoping with the world\u201d; truth is success."},
+ {sec:"Realism, Idealism & Pragmatism", q:"The position close to idealism holding that much of science is a human construction reflecting social interaction is called\u2026",
+  o:["Social constructionism","Convergent realism","Naturalism","Operationalism"],a:0,
+  e:"Social constructionism sees science as a reflection of social interactions more than of the world."},
+ {sec:"Realism, Idealism & Pragmatism", q:"The pragmatic (\u201cfunctional\u201d) view holds that knowledge is\u2026",
+  o:["An interaction of subject and object \u2014 coping, not mirroring","A passive mirror of reality","A purely subjective construction","A fixed, closed logical system"],a:0,
+  e:"In Rorty\u2019s words, knowing is coping with the world rather than mirroring it \u2014 subject-relative but not arbitrary."},
+
+ {sec:"The Six Characteristics", q:"Which of the following is one of the six listed characteristics of scientific method (Nagel)?",
+  o:["Systematicity","Profitability","Popularity","Permanence"],a:0,
+  e:"The six: systematicity, well-defined methods, reduction, objectivity, clarity, and revisability."},
+ {sec:"The Six Characteristics", q:"The characteristic that scientific knowledge is \u201copen, at all times revisable, and never definitive\u201d is\u2026",
+  o:["Revisability","Objectivity","Clarity","Reduction"],a:0,
+  e:"Science is never closed: knowledge claims are always open to revision."},
+ {sec:"The Six Characteristics", q:"\u201cObjectivity\u201d as a characteristic of science is defined as being\u2026",
+  o:["Controllable, reliable and intersubjectively observable","Emotionally neutral","Mathematically certain","Universally popular"],a:0,
+  e:"E.g. \u201cslow schizophrenia\u201d seen only by KGB-trained psychiatrists is not scientific \u2014 not replicable by others."},
+
+ {sec:"Deduction", q:"In a deductive (conclusive) argument, accepting the premises while denying the conclusion produces\u2026",
+  o:["A contradiction","An induction","A probability","An abduction"],a:0,
+  e:"The premises \u201ccontain\u201d the conclusion; rejecting it while accepting them is self-contradictory."},
+ {sec:"Deduction", q:"A deductive conclusion is true under two conditions: the premises must be true and the argument must be\u2026",
+  o:["Valid (sound)","Inductive","Probable","Falsifiable"],a:0,
+  e:"Validity is about form; truth is about content. Both are needed for a true conclusion."},
+ {sec:"Deduction", q:"\u201cAll politicians are liars / All MPs are politicians / Thus all MPs are liars\u201d demonstrates that a valid argument can still be\u2026",
+  o:["False, because a premise is false","Invalid in form","Inductively strong","Logically contradictory"],a:0,
+  e:"Soundness lies in the form; truth depends on content. A valid argument with a false premise yields a doubtful conclusion."},
+ {sec:"Deduction", q:"The behaviourist who tried (and failed) to build psychology as a single deductive system like Euclid\u2019s geometry was\u2026",
+  o:["Clark Hull","John Watson","B.F. Skinner","Edward Tolman"],a:0,
+  e:"Hull thought behaviour could be deduced from clearly stated principles \u2014 but his system didn\u2019t work out."},
+
+ {sec:"Induction & its Problems", q:"Inductive arguments generalise: what is true of a number of members of a class is\u2026",
+  o:["Likely to be true of all members","Certainly true of all members","Never true of other members","True only of those observed"],a:0,
+  e:"Inductive support comes by degrees \u2014 it depends on the amount of evidence relative to the scope of the conclusion."},
+ {sec:"Induction & its Problems", q:"Unlike a deductive conclusion, an inductive conclusion\u2026",
+  o:["Always goes beyond the evidence","Is logically contained in the premises","Is always certain","Requires no evidence at all"],a:0,
+  e:"No matter how strong, induction remains inconclusive: the conclusion always exceeds the evidence."},
+ {sec:"Induction & its Problems", q:"Hume concluded that we arrive at inductive conclusions not by logic but by\u2026",
+  o:["Habit \u2014 a psychological step","Divine inspiration","Deductive proof","Mathematical axioms"],a:0,
+  e:"For Hume, expecting the sun to rise is a psychologically understandable habit, not a logical argument."},
+ {sec:"Induction & its Problems", q:"The \u201cRaven paradox\u201d illustrates that\u2026",
+  o:["Induction cannot be logically justified the way deduction can","All ravens are definitely black","Observation is impossible","Deduction is unreliable"],a:0,
+  e:"\u201cAll ravens are black\u201d is logically equivalent to \u201call non-black things are non-ravens\u201d \u2014 so white sneakers would \u2018confirm\u2019 it. Absurd, but valid logic; the logic simply does not work for induction."},
+ {sec:"Induction & its Problems", q:"The \u201cproblem of induction\u201d is the suspicion that\u2026",
+  o:["Scientific inference lacks a rational justification","Scientists never observe anything","Deduction produces new knowledge","Theories are always true"],a:0,
+  e:"Hume\u2019s sceptical conclusion: inductive arguments cannot be justified by reasoning \u2014 there is no rational foundation for them."},
+
+ {sec:"Abduction", q:"Inference to the best explanation was christened \u201cabduction\u201d by\u2026",
+  o:["C.S. Peirce","David Hume","Karl Popper","Francis Bacon"],a:0,
+  e:"The pragmatist Peirce named this kind of probably-reliable explanatory reasoning."},
+ {sec:"Abduction", q:"In abduction, an explanatory hypothesis derived from a set of facts yields\u2026",
+  o:["A possibility, not logical certainty","Absolute certainty","A deductive proof","A tautology"],a:0,
+  e:"Wet streets suggest rain, but a water pipe may have burst \u2014 it is a possibility, never a certainty."},
+ {sec:"Abduction", q:"\u201cIf S then R; R is the case; therefore possibly S\u201d (wet streets \u2192 maybe it rained) is an example of\u2026",
+  o:["Abduction","Valid deduction","Statistical induction","The raven paradox"],a:0,
+  e:"This is the structure of abduction \u2014 inference to the best explanation."},
+
+ {sec:"Observation, Empiricism & Theory-Ladenness", q:"Francis Bacon thought the right method for science was to\u2026",
+  o:["Collect facts like a bee gathers honey, free of prejudice","Begin from bold theoretical conjectures","Rely on divine revelation","Deduce everything from innate axioms"],a:0,
+  e:"Bacon treated imagination as a danger (\u2018idols\u2019); but pure fact-collecting is implausible \u2014 we always start from preconceived ideas."},
+ {sec:"Observation, Empiricism & Theory-Ladenness", q:"The notion that observation is always partly determined by one\u2019s theoretical assumptions is called\u2026",
+  o:["Theory-ladenness","Operationalization","Correspondence","Verification"],a:0,
+  e:"There is no \u2018immaculate perception\u2019: facts are statements held to be true, never independent of other beliefs."},
+ {sec:"Observation, Empiricism & Theory-Ladenness", q:"According to the chapter, a \u201cfact\u201d is best understood as\u2026",
+  o:["A statement/belief one holds to be true","A theory-independent piece of reality","A mathematical axiom","An unobservable entity"],a:0,
+  e:"Facts are convictions that something is the case \u2014 never wholly independent of one\u2019s other notions."},
+ {sec:"Observation, Empiricism & Theory-Ladenness", q:"That several different theories may be compatible with the same dataset means theories are\u2026",
+  o:["Underdetermined by data","Falsified","Verified","Reduced"],a:0,
+  e:"Underdetermination (cf. the Quine\u2013Duhem thesis): the data alone cannot fix a single theory."},
+ {sec:"Observation, Empiricism & Theory-Ladenness", q:"In Hanson\u2019s thought-experiment, Kepler and Tycho Brahe watching the dawn\u2026",
+  o:["Do not see the same thing, because seeing is theory-laden","See exactly the same thing","Prove observation is theory-neutral","Reject all theories"],a:0,
+  e:"Though their eyes receive similar sensations, what they see depends on their theories \u2014 \u2018there is more to seeing than meets the eye\u2019."},
+
+ {sec:"Theory & Model", q:"De Groot defines a theory as a system of interrelated statements formulated so that one can derive\u2026",
+  o:["Testable hypotheses","Absolute certainties","Moral rules","Random predictions"],a:0,
+  e:"A theory is logically interrelated, non-contradictory statements from which testable hypotheses follow."},
+ {sec:"Theory & Model", q:"A model, in the chapter, is best described as\u2026",
+  o:["A kind of mini-theory \u2014 a visualizable representation","A complete axiomatic system","A raw observation statement","An accidental generalization"],a:0,
+  e:"A model offers a more-or-less visualizable representation, like the coloured-balls model of the atom; it mediates between laws and phenomena."},
+ {sec:"Theory & Model", q:"Bailer-Jones defines a model in science as\u2026",
+  o:["An interpretive description of a phenomenon that facilitates access to it","A strictly mathematical proof","A theory-free observation","A list of raw data"],a:0,
+  e:"This broad definition includes analogies, metaphors, drawings, scale models, and mathematical equations."},
+
+ {sec:"Empirical & Theoretical Laws", q:"A law in which only observables occur is an\u2026",
+  o:["Empirical law","Theoretical law","Accidental generalization","Correspondence rule"],a:0,
+  e:"Empirical (experimental) laws are inductive generalisations over observable concepts, e.g. Mendelian inheritance of eye colour."},
+ {sec:"Empirical & Theoretical Laws", q:"A law that invokes unobservables (e.g. genes, chromosomes) is a\u2026",
+  o:["Theoretical law","Empirical law","Ceteris paribus law","Statistical law"],a:0,
+  e:"Once genes or chromosomes are mentioned, the law takes on a theoretical character."},
+ {sec:"Empirical & Theoretical Laws", q:"The difference between empirical and theoretical laws is\u2026",
+  o:["Gradual, not absolute","Absolute and sharp","Purely linguistic","Irrelevant to science"],a:0,
+  e:"Observations in empirical laws are theory-laden, and unobservables in theoretical laws are verified indirectly \u2014 so the line is gradual."},
+
+ {sec:"Causality", q:"Hume argued that causality is no more than\u2026",
+  o:["Constant conjunction","Logical necessity","Divine will","Mathematical proof"],a:0,
+  e:"On the \u2018regularity view\u2019, the felt necessity of cause is in our heads \u2014 we cannot know anything behind the constant conjunction."},
+ {sec:"Causality", q:"The INUS condition defines a cause as an insufficient but non-redundant part of an\u2026",
+  o:["Unnecessary but sufficient condition","Necessary and sufficient condition","Accidental correlation","Observation statement"],a:0,
+  e:"Insufficient + Non-redundant part of an Unnecessary + Sufficient condition \u2014 e.g. a short circuit causing a farm fire."},
+ {sec:"Causality", q:"The global correlation between number of lampposts and incidence of colon cancer illustrates\u2026",
+  o:["The difference between causation and accidental correlation","A genuine causal law","The INUS condition","Circular causation"],a:0,
+  e:"Removing lampposts won\u2019t prevent cancer: both rise with wealth (more lampposts, more red-meat consumption) \u2014 a common-cause artefact."},
+ {sec:"Causality", q:"Woodward\u2019s \u201cinterventionism\u201d understands causal explanation in terms of\u2026",
+  o:["Experimental manipulation / intervention","Constant conjunction only","Logical deduction","Divine necessity"],a:0,
+  e:"A cause is a point of intervention; causal claims refer to the outcome of a (possibly hypothetical) experiment."},
+
+ {sec:"The Empirical Cycle", q:"The empirical cycle (De Groot) runs: observation, induction, deduction, testing and\u2026",
+  o:["Evaluation","Falsification","Reduction","Verification"],a:0,
+  e:"Evaluation feeds the results back into the theory, which spawns new hypotheses \u2014 a never-ending circle."},
+ {sec:"The Empirical Cycle", q:"Defining a concept by measurement operations (e.g. intelligence = IQ-test score) is called\u2026",
+  o:["Operationalization","Abduction","Reduction","Corroboration"],a:0,
+  e:"Operationalization occurs in the deduction stage, turning theoretical concepts into testable predictions."},
+ {sec:"The Empirical Cycle", q:"The empirical cycle is best characterised as\u2026",
+  o:["A never-ending circular process","A one-time linear procedure","A purely deductive system","A purely subjective exercise"],a:0,
+  e:"Both the context of discovery and the context of justification are in play; induction is as indispensable as deduction."},
+
+ {sec:"The Norms of Science \u00b7 CUDOS", q:"The four Mertonian norms summarised by CUDOS are communism, universalism, disinterestedness and\u2026",
+  o:["Organized skepticism","Objectivity","Determinism","Secrecy"],a:0,
+  e:"Communism, Universalism, Disinterestedness, Organized Skepticism. (More recently \u2018originality\u2019 is sometimes added.)"},
+ {sec:"The Norms of Science \u00b7 CUDOS", q:"The norm of \u201ccommunism\u201d in science means that\u2026",
+  o:["Findings are common heritage assigned to the community","Scientists must be political communists","Science must be government-controlled","Discoveries should be kept secret"],a:0,
+  e:"A scientist\u2019s \u2018property rights\u2019 are limited to recognition and esteem; the products of competition are communised."},
+ {sec:"The Norms of Science \u00b7 CUDOS", q:"\u201cUniversalism\u201d holds that truth-claims should be judged by\u2026",
+  o:["Preestablished impersonal criteria, regardless of the claimant","The nationality of the scientist","The race of the claimant","The popularity of the idea"],a:0,
+  e:"Acceptance must not rest on personal or social attributes \u2014 directly opposing the Nazi notion of \u2018Jewish\u2019 science."},
+ {sec:"The Norms of Science \u00b7 CUDOS", q:"Merton\u2019s norms were originally framed partly as a response to the threat to scientific autonomy from\u2026",
+  o:["Nazi science and ideology","The Catholic Church","American capitalism","The Soviet space programme"],a:0,
+  e:"His 1938/1942 papers reacted to the political crisis over Nazi science and the defence of science\u2019s freedom from political control."},
+ {sec:"The Norms of Science \u00b7 CUDOS", q:"Ian Mitroff proposed a \u201ccounternorm\u201d for each norm; the counternorm to organized skepticism is\u2026",
+  o:["Organized dogmatism","Emotional neutrality","Universalism","Disinterestedness"],a:0,
+  e:"Mitroff\u2019s moon-scientist study: a scientist must believe his own findings with utter conviction while doubting others\u2019 \u2014 tenacity as a condition for progress."}
+];
+
+let answered = 0, correct = 0;
+const answeredSet = new Array(QUESTIONS.length).fill(null); // stores chosen index
+const LETTERS = ["A","B","C","D"];
+
+const quizEl = document.getElementById('quiz');
+
+function buildQuiz(){
+  quizEl.innerHTML = '';
+  let currentSec = null;
+  QUESTIONS.forEach((item, i)=>{
+    if(item.sec !== currentSec){
+      currentSec = item.sec;
+      const secCount = QUESTIONS.filter(x=>x.sec===currentSec).length;
+      const head = document.createElement('div');
+      head.className = 'section-head';
+      const secIndex = [...new Set(QUESTIONS.map(x=>x.sec))].indexOf(currentSec)+1;
+      head.innerHTML = `<div class="s-num">Section ${String(secIndex).padStart(2,'0')}</div>
+        <h2>${item.sec}</h2><div class="s-line"></div>`;
+      quizEl.appendChild(head);
+    }
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'q'+i;
+    card.innerHTML = `
+      <div class="q-top">
+        <div class="q-index">${String(i+1).padStart(2,'0')}</div>
+        <div class="q-text">${item.q}</div>
+      </div>
+      <div class="options" id="opts${i}">
+        ${item.o.map((opt,j)=>`
+          <div class="option" data-q="${i}" data-o="${j}">
+            <span class="letter">${LETTERS[j]}</span>
+            <span class="otext">${opt}</span>
+            <span class="mark"></span>
+          </div>`).join('')}
+      </div>
+      <div class="explain" id="exp${i}">
+        <div class="explain-inner"><b>Why</b>${item.e}</div>
+      </div>`;
+    quizEl.appendChild(card);
+  });
+  document.querySelectorAll('.option').forEach(el=>{
+    el.addEventListener('click', onChoose);
+  });
+}
+
+function onChoose(e){
+  const el = e.currentTarget;
+  const qi = +el.dataset.q, oi = +el.dataset.o;
+  if(answeredSet[qi] !== null) return; // already answered
+
+  answeredSet[qi] = oi;
+  const correctIdx = QUESTIONS[qi].a;
+  const optsWrap = document.getElementById('opts'+qi);
+  optsWrap.classList.add('locked');
+
+  optsWrap.querySelectorAll('.option').forEach(opt=>{
+    opt.classList.add('locked');
+    const j = +opt.dataset.o;
+    if(j === correctIdx){
+      opt.classList.add('correct');
+      opt.querySelector('.mark').textContent = '\u2713';
+    } else if(j === oi){
+      opt.classList.add('incorrect');
+      opt.querySelector('.mark').textContent = '\u2715';
+    }
+  });
+
+  document.getElementById('q'+qi).classList.add('answered');
+  document.getElementById('exp'+qi).classList.add('show');
+
+  answered++;
+  if(oi === correctIdx) correct++;
+  updateStatus();
+}
+
+function updateStatus(){
+  document.getElementById('answeredCount').textContent = answered;
+  document.getElementById('correctCount').textContent = correct;
+  document.getElementById('progressFill').style.width = (answered/QUESTIONS.length*100)+'%';
+  const revealBtn = document.getElementById('revealBtn');
+  if(answered === QUESTIONS.length){
+    revealBtn.classList.add('show');
+  } else {
+    revealBtn.classList.remove('show');
+  }
+}
+
+function showResults(){
+  const pct = Math.round(correct/QUESTIONS.length*100);
+  document.getElementById('scorePct').innerHTML = pct+'<span>%</span>';
+  document.getElementById('scoreFrac').textContent = correct+' / '+QUESTIONS.length+' correct';
+
+  let verdict;
+  if(pct>=90) verdict = "Outstanding \u2014 exam-ready command of the material.";
+  else if(pct>=75) verdict = "Strong. A short review of the weaker sections will seal it.";
+  else if(pct>=60) verdict = "A solid base \u2014 target the lower-scoring sections next.";
+  else if(pct>=40) verdict = "Foundations are forming. Revisit the readings, then retake.";
+  else verdict = "Early days. Work through the notes section by section and try again.";
+  document.getElementById('verdict').textContent = verdict;
+
+  // per-section breakdown
+  const secs = [...new Set(QUESTIONS.map(x=>x.sec))];
+  const bd = document.getElementById('breakdown');
+  bd.innerHTML = '';
+  secs.forEach(s=>{
+    const idxs = QUESTIONS.map((q,i)=>({q,i})).filter(o=>o.q.sec===s);
+    const total = idxs.length;
+    const got = idxs.filter(o=>answeredSet[o.i]===o.q.a).length;
+    const p = Math.round(got/total*100);
+    const row = document.createElement('div');
+    row.className='bd-row';
+    row.innerHTML = `<span class="bd-label">${s}</span>
+      <span class="bd-bar"><i style="width:${p}%"></i></span>
+      <span class="bd-score">${got}/${total}</span>`;
+    bd.appendChild(row);
+  });
+
+  const res = document.getElementById('results');
+  res.classList.add('show');
+  document.getElementById('revealBtn').classList.remove('show');
+  res.scrollIntoView({behavior:'smooth'});
+}
+
+function resetQuiz(){
+  answered = 0; correct = 0;
+  for(let i=0;i<answeredSet.length;i++) answeredSet[i]=null;
+  document.getElementById('results').classList.remove('show');
+  buildQuiz();
+  updateStatus();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function scrollToFirstWrong(){
+  for(let i=0;i<QUESTIONS.length;i++){
+    if(answeredSet[i]!==null && answeredSet[i]!==QUESTIONS[i].a){
+      document.getElementById('q'+i).scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+  }
+  alert('No mistakes to review \u2014 a flawless run.');
+}
+
+buildQuiz();
+updateStatus();
+</script>
+</body>
+</html>
